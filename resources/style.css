@@ -1453,7 +1453,7 @@ h1 {
 
 /* --- Layout adjustments for short, narrow portrait screens --- */
 
-@media (max-height: 668px) and (max-width: 500px) and (orientation: portrait) {
+@media (max-height: 750px) and (max-width: 500px) and (orientation: portrait) {
 
   /* --- Main heading font size --- */
 
@@ -1488,20 +1488,20 @@ h1 {
 
   /* --- Victory button scaling --- */
 
-  #action_button.victory-portrait_square {
-    transform: scale(1.2);
-  }
-
-  /* --- Default button scaling --- */
-
-  #action_button.default_style {
+  #action_button.victory-portrait_square  {
     transform: scale(1.15);
   }
 
-  /* --- Game-over and true ending button scaling --- */
+  /* --- Default and game-over button scaling --- */
 
-  #action_button.game-over-portrait_square, .true_ending_button {
+  #action_button.default_style, #action_button.game-over-portrait_square {
     transform: scale(1.1);
+  }
+
+  /* --- True ending button scaling --- */
+
+  .true_ending_button {
+    transform: scale(1.05);
   }
 }
 
@@ -1577,14 +1577,6 @@ h1 {
   .true_ending_text.credits {
     top: 28%;
   }
-
-  /* --- Epic victory, ending, and game-over button scaling --- */
-
-  #action_button.epic-victory, 
-  #action_button.game-over-portrait_square,
-  .true_ending_button {
-    transform: scale(1.25);
-  } 
 }
 
 /* --- Layout adjustments for very narrow, short portrait screens --- */
