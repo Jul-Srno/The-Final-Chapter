@@ -1,0 +1,1913 @@
+/* =================================
+   1. GLOBAL & BASE
+   ================================= */
+
+/* --- Document defaults --- */
+ 
+html {
+  font-size: 18px;
+}
+
+body {
+  min-height: 100vh;
+  background-image: url(./images/main_background.png);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1rem,4vh,3rem);
+  margin: 0;
+}
+
+/* --- Background states --- */
+
+/* Simplify the background while a modal is open. */
+body.hidden {
+  background-image: none;
+  background-color: rgb(13,13,13);
+} 
+
+/* Add a red overlay to indicate that the player has been hurt. */
+body.red-tint::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(145, 0, 0, 0.35); 
+  pointer-events: none; 
+  z-index: 9999;
+}
+ 
+body.disclaimer {
+  background-image: url(./images/disclaimer_landscape_background_image.png);
+}
+
+/* =================================
+   2. GAME LAYOUT
+   ================================= */
+
+/* --- Shared layout dimensions --- */
+
+.header, h1 { 
+  width: 100%;
+  position: absolute;
+  top: 7.5%;
+}
+
+/* --- Shared signature backgrounds --- */
+
+.signature, .signature_win {
+  background-color: rgba(48,48,48, 0.7);
+}
+
+/* --- Header --- */
+
+.header {
+  text-align: center;
+  color: #9A9898;
+  margin-bottom: 1rem;
+}
+
+/* --- Main game content --- */
+
+.game_content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* --- Main title --- */
+
+h1 {
+  font-family: 'IM Fell English', serif;
+  font-size: 3.5rem;
+  margin: 0;
+  color: #6f6b66;
+  text-shadow: 0 0 6px rgba(255,255,255,0.1);
+}
+
+/* --- Signature --- */
+
+.signature {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-size: clamp(0.8rem, 2.2vw, 1.2rem);
+  font-style: italic;
+  letter-spacing: 0.5px;
+  position: fixed;
+  bottom: 0.75vw;
+  right: 0.75vw;
+  margin: 0;
+  color: #C68642;
+}
+
+/* --- Signature states --- */
+
+.signature_game_over {
+  background-color: rgba(0, 0, 0, 0.3);
+  color: rgb(121,119,119);
+}
+
+.signature_win {
+  color: yellowgreen;
+}
+
+/* =================================
+   3. GAME ELEMENTS
+   ================================= */
+
+/* --- Level counter --- */
+
+.level_counter {
+  position: fixed; 
+  font-family: 'IM Fell English SC', serif;
+  font-weight: 400;
+  font-size: 2.25rem;
+  color: #b11226;
+  text-shadow: 0 0 8px rgba(255,0,0,0.7);
+}
+
+/* --- Crucifix visibility --- */
+
+.crucifix {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.crucifix.hidden {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* --- Inventory --- */
+
+#inventory {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  bottom: 1vw;
+  right: 1vw;
+  margin: 0;
+}
+
+#inventory img {
+  width: clamp(1rem, 3vw, 3rem);
+  height: auto;
+  display: block;
+  margin-bottom: 0;
+}
+
+/* =================================
+   4. DOORS
+   ================================= */
+
+/* --- Shared door interaction --- */
+
+.door-button, .door-frame {
+  cursor: pointer;
+}
+
+/* --- Door layout --- */
+
+.doors-section {
+  display: flex;
+  gap: 2rem;
+  position: absolute;
+}
+
+/* --- Door button reset --- */
+  
+.door-button {
+  appearance: none;
+  -webkit-appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+/* --- Door image --- */
+ 
+.door-frame {
+  display: block;
+}
+
+/* --- Door visibility state --- */
+
+.door-frame.visible {
+  display: flex; 
+}
+
+/* =================================
+   5. HIDDEN STATES
+   ================================= */
+
+/* Hide elements when their hidden state is active. */   
+
+#inventory.hidden,
+#action_button.hidden,
+.header.hidden,
+.level_counter.hidden,
+.door-frame.hidden,
+.signature.hidden,
+.credits_button.hidden {
+  display: none;
+}
+
+/* =================================
+   6. MODALS
+   ================================= */
+
+/* --- Shared typography --- */
+
+.modal-title, .modal-text {
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+#hurted_modal p, .modal-title {
+  font-weight: 600;
+}
+
+/* --- Shared layout --- */
+
+.modal_content, .modal-text{
+  display : flex;
+}
+
+.modal, .modal_content, .modal-text {
+   flex-direction: column;
+}
+
+.modal, .modal_content {
+  justify-content: center;
+}
+
+/* --- Modal overlay --- */
+
+.modal {
+  display: none; 
+  position: fixed;
+  inset: 0;
+  font-family: "IM Fell English", serif;
+  background: rgba(0,0,0,0.7);
+  align-items: center;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.modal-title {
+  letter-spacing: 1px;
+}
+
+/* --- Modal content container --- */
+
+.modal_content {
+  width: min(92vw, 3840px);
+  height: min(90vh, 3840px);
+  border-radius: 0.5rem;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* --- Modal text --- */
+
+.modal-text {
+  line-height: 1.6;
+  max-width: 60ch;
+  margin: 0 auto;
+  overflow-y: auto;
+  color: #030202;
+  padding: 0 1rem;
+  font-weight: 500;
+  white-space: pre-line;
+}
+
+.modal-text p {
+  margin-bottom: 1.2rem;
+}
+
+/* --- Modal hint --- */
+
+.modal-hint {
+  opacity: 0.8;
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+  background-color:rgba(100,100,100, 0.1);
+}
+
+/* --- Text scrollbar --- */
+
+.modal-text::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-text::-webkit-scrollbar-thumb {
+  background-color: rgba(255,255,255,0.3);
+  border-radius: 3px;
+}
+
+/* --- Individual modal backgrounds and effects --- */
+
+#instructions_modal .modal_content {
+  background-image: url("./images/instructions_landscape_background_modal.jpg");
+  border: 2px solid rgb(13,13,13);
+}
+
+#ghost_modal .modal_content {
+  background-image: url("./images/ghost_portrait_image.jpg");
+  animation: fadeOut 2500ms ease-in 1400ms forwards;
+  transition: none;
+}
+
+#escaped_modal .modal_content {
+  background-image: url("./images/exit_door.png");
+  background-size: contain;
+}
+
+#continue_modal .modal_content {
+  background-image: url("./images/continue_landscape_background_modal.jpg");
+}
+
+#hurted_modal .modal_content {
+  background-image: url("./images/hurted_landscape_background_modal.jpg");
+}
+
+#hurted_modal h2 {
+  margin-top: 1rem;
+}
+
+/* =================================
+   7. BUTTONS
+   ================================= */
+
+/* --- Shared button positioning --- */
+
+#action_button.default_style,
+#action_button.game-over-landscape,
+#action_button.game-over-portrait_square,
+#action_button.victory-landscape,
+#action_button.victory-portrait_square,
+#action_button.epic-victory,
+.buttons,
+.true_ending_button,
+.credits_button {
+  position: fixed;
+}
+
+#action_button.victory-landscape,
+#action_button.victory-portrait_square, 
+#action_button.epic-victory, 
+.true_ending_button {
+  bottom: 7%;
+}
+
+/* --- Shared classic victory button appearance --- */
+
+#action_button.victory-landscape,
+#action_button.victory-portrait_square,
+.true_ending_button,
+.credits_button {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 248, 225, 0.78),
+    rgba(240, 220, 185, 0.72)
+  );
+
+  color: #2a140c;
+  box-shadow: 
+      0 0 10px rgba(255, 230, 180, 0.25);
+  border: 1px solid rgba(255, 245, 220, 0.45);
+}
+
+/* --- Shared button typography --- */
+
+
+#action_button.victory-landscape,
+#action_button.victory-portrait_square,
+#action_button.epic-victory,
+#action_button.game-over-portrait_square,
+.true_ending_button,
+.credits_button {
+  font-family: "Cormorant Garamond", serif;
+  font-style: italic;
+  font-size: 1.2rem;
+}
+
+/* --- Shared button visibility and spacing --- */
+
+#action_button.game-over-landscape,
+#action_button.game-over-portrait_square,
+#action_button.victory-landscape,
+#action_button.victory-portrait_square,
+#action_button.epic-victory,
+.credits_button,
+.true_ending_button {
+  opacity: 0;
+  padding: 0.7rem;
+}
+
+/* --- Shared rounded button shapes --- */
+
+
+#action_button.victory-landscape,
+#action_button.victory-portrait_square,
+#action_button.epic-victory,
+#action_button.game-over-landscape,
+.true_ending_button,
+.credits_button {
+  border-radius: 50%;
+}
+
+/* --- Shared button font weights --- */
+
+#action_button.default_style,
+#action_button.victory-landscape,
+#action_button.victory-portrait_square,
+#action_button.epic-victory,
+.true_ending_button,
+.credits_button {
+  font-weight: 500;
+}
+
+#action_button.game-over-landscape, 
+#action_button.game-over-portrait_square {
+  font-weight: 600;
+  border: none;
+  background-color:  rgba(70, 55, 45, 0.45);
+  color: #e8dcc8;
+}
+
+/* --- Shared button animations and transitions --- */
+
+#action_button.game-over-landscape,
+#action_button.game-over-portrait_square,
+#action_button.victory-landscape,
+#action_button.victory-portrait_square,
+#action_button.epic-victory,
+.credits_button,
+.true_ending_button.animation {
+  animation: appear 2s forwards;
+  transition: none;
+}
+
+/* --- Button animation delays --- */
+
+#action_button.game-over-landscape,
+#action_button.game-over-portrait_square,
+#action_button.victory-landscape,
+#action_button.victory-portrait_square,
+#action_button.epic-victory {
+  animation-delay: 2s;
+}
+
+.true_ending_button.animation, .credits_button {
+  animation-delay: 1s;
+}
+
+/* --- Button container --- */
+
+.buttons {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* --- Default start button appearance --- */
+
+#action_button.default_style  {
+  font-family: "EB Garamond", serif;
+  font-size: 1rem;
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(95, 55, 35, 0.92) 0%,
+      rgba(55, 30, 18, 0.95) 40%,
+      rgba(12, 8, 6, 0.92) 100%
+    );
+  border: 1px solid rgba(120, 70, 40, 0.18);
+  color: #f0dfc2;
+  box-shadow: 0 0 12px rgba(40, 20, 10, 0.45);
+  padding: 0.5rem;
+  cursor: pointer;
+  opacity: 1;
+  transition:
+    background 0.7s ease,
+    color 0.4s ease,
+    box-shadow 0.7s ease,
+    transform 0.25s ease;
+  bottom: 7.5%;
+}
+
+/* --- action button interaction states --- */
+
+#action_button:hover, 
+#action_button:active {
+  background: #ff002b8c;
+  color: white;
+}
+
+/* --- Credits button --- */
+  
+.credits_button {
+  top: 8%;
+}
+
+/* --- Game over button: landscape specific rule --- */
+
+#action_button.game-over-landscape {
+  font-size: 1rem;
+  font-family: "Cinzel Decorative", serif;
+  top: 7%;
+}
+
+/* --- Victory button scaling --- */
+
+#action_button.victory-landscape {
+  transform: scale(1.5);
+}
+
+#action_button.victory-portrait_square {
+  transform: scale(1.3);
+}
+
+/* --- Epic victory button appearance --- */
+
+#action_button.epic-victory {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 248, 225, 0.92),
+    rgba(240, 220, 185, 0.88)
+  );
+  color: #2a140c;
+  box-shadow: 0 0 10px rgba(255, 230, 180, 0.42);
+  border: 1px solid rgba(255, 245, 220, 0.72);
+}
+
+/* =================================
+   8. ENDINGS
+   ================================= */
+
+/* --- True ending text --- */
+
+.true_ending_text {
+  font-size: 1.3rem;
+  position: absolute;
+  font-family: 'Special Elite', serif;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  text-align: center;
+  white-space: pre-line;
+}
+
+/* --- Typing cursor animation --- */
+
+.typing::after {
+  content: "|";
+  animation: blink 2s infinite;
+}
+
+/* --- Credits text layout --- */
+
+.true_ending_text.credits {
+  top: 35.5%;
+  left: 51%;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+/* =================================
+   9. BACKGROUNDS
+   ================================= */
+
+/* --- Landscape backgrounds --- */
+
+.game_over_landscape_background {
+  background-image: url('./images/game_over_background.jpeg');
+}
+
+.classic_win_landscape_background {
+  background-image: url('./images/victory_landscape_background.jpg');
+}
+
+.epic_win_landscape_background {
+  background-image: url('./images/epic_win_landscape_background.webp');
+}
+
+.true_ending_landscape_background {
+  background-image: url('./images/true_ending_landscape_background.png');
+}
+
+/* --- Portrait backgrounds --- */
+
+.game_over_portrait_square_background {
+  background-image: url('./images/game_over_portrait_background.jpg');
+}
+
+.classic_win_portrait_square_background {
+  background-image: url('./images/victory_portrait_background.jpeg');
+}
+
+.epic_win_portrait_square_background {
+  background-image: url('./images/epic_win_portrait_background.jpg');
+}
+
+.true_ending_portrait_square_background {
+  background-image: url('./images/true_ending_portrait_background.png');
+}
+
+/* =================================
+   10. ACCESSIBILITY
+   ================================= */
+
+/* --- Screen reader-only content --- */
+
+.sr-only {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px; 
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =================================
+   11. ANIMATIONS
+   ================================= */
+
+/* --- Element appearance --- */
+
+@keyframes appear {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* --- Fade-out effect --- */
+
+@keyframes fadeOut {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* --- Blinking effect --- */
+
+@keyframes blink {
+  0%, 50%, 100% { opacity: 1; }
+  25%, 75% { opacity: 0; }
+}
+
+/* =================================
+   12. RESPONSIVE
+   ================================= */
+
+/* ---12.1 Base landscape --- */
+
+@media (orientation: landscape) {
+
+  /* --- Door sizing --- */
+
+  .door-frame {
+    width: 18vw;
+  }
+
+  /* --- Clickable zone in disclaimer modal --- */
+ 
+  #disclaimer_modal {
+    position: absolute;
+    height: 86%;
+    width: 48%;
+    top: 13.5%;
+    left: 26%;
+    cursor: pointer;
+  }
+
+  /* --- True ending text layout --- */
+  
+  .true_ending_text {
+    top: 42%;
+  }
+
+  .doors-section {
+    top: 26%;
+  }
+
+  /* --- Credits text layout --- */
+  
+  .true_ending_text.credits {
+    max-height: 32vw;
+    max-width: 47vw;
+    left: 52%;
+  }
+
+  /* --- Ghost modal background --- */
+
+  #ghost_modal .modal_content {
+    background-image: url("./images/ghost_landscape_square_image.jpg");
+  }
+
+  /* --- Level counter positioning --- */
+
+  .level_counter {
+    bottom: 0.25vw;
+    left: 1.5vw;
+  }
+}
+
+/* ---12.2 Base portrait --- */
+
+@media (orientation: portrait) {
+
+  /* --- Modal text font size --- */
+
+  .modal-text {
+    font-size: 1.25rem;
+  }
+
+  /* --- Instructions modal layout --- */
+
+  #instructions_modal {
+    padding: 1rem;
+    background-size: cover;
+  }
+
+  #instructions_modal .modal_content {
+    background-image: url(./images/instructions_portrait_square_background_modal.jpg);
+  }
+
+  /* --- Doors layout and sizing --- */
+
+  .doors-section {
+    top: 11%;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .door-frame {
+    width: 16dvh;
+  }
+
+  /* --- True ending text layout --- */
+ 
+  .true_ending_text {
+    transform: translateX(-33%);
+    top: 40%;
+    left: 47%;
+  }
+
+  /* --- Credits text layout --- */
+  
+  .true_ending_text.credits {
+    top: 30%;
+    max-height: 52vh;
+  }
+
+  /* --- Game over layout --- */
+
+  #action_button.game-over-portrait_square {
+    bottom: 12%;
+  }
+
+  /* --- Game over signature appearance --- */
+
+  .signature_game_over {
+    color: rgba(220,220,220, 0.4);
+    background-color: black;
+  }
+
+  /* --- Modal backgrounds --- */
+
+  #continue_modal .modal_content {
+    background-image: url("./images/continue_portrait_square_background_modal.jpg");
+  }
+
+  #hurted_modal .modal_content {
+    background-image: url("./images/hurted_portrait_square_background_modal.jpg");
+  }
+
+  /* --- Disclaimer background --- */
+  
+  body.disclaimer {
+     background-image: url(./images/disclaimer_portrait_background_image.png);
+     background-size: cover;
+  }
+
+  /* --- Clickable zone in disclaimer modal  --- */
+ 
+  #disclaimer_modal {
+    position: absolute;
+    height: 42%;
+    width: 92%;
+    top: 10%;
+    left: 4.5%;
+    cursor: pointer;
+  }
+
+  /* --- Header positioning --- */
+
+  .header {
+    top: 3%;
+  }
+
+  /* --- Level counter sizing and positioning --- */
+
+  .level_counter {
+    font-size: clamp(1.6rem, 1.5vw, 3.2rem);
+    bottom: 0.25vw;
+    left: 1.75vw;
+  }
+
+  /* --- Inventory positioning --- */
+
+  #inventory {
+    bottom: 2vw;
+    right: 1.75vw;
+  }
+
+  /* --- Signature positioning and sizing --- */
+
+  .signature {
+    font-size: clamp(1.15rem, 2.5vw, 4rem);
+    bottom: 1vw;
+    right: 1.5vw;
+  }
+
+  /* --- Ending buttons positioning --- */
+
+  .credits_button {
+    top: 7%;
+  }
+
+  .true_ending_button {
+    bottom: 7%;
+  }
+
+  /* --- Hurt modal text spacing --- */
+
+  #hurted_modal p {
+    margin-top: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* ---12.3. Large screens --- */
+
+/* --- Button scaling on large landscape screens --- */
+
+@media (min-width:1000px) and (orientation: landscape) {
+
+  #action_button.default_style {
+    transform: scale(1.4);
+    bottom: 10.5%;
+  }
+}
+
+/* --- Layout adjustments for extra-wide, short landscape screens --- */
+
+@media (min-width: 1500px) and (max-height: 800px) and (orientation: landscape) {
+
+  /* --- Credits text positioning and height constraints --- */
+
+  .true_ending_text.credits {
+    top: 30.5%;
+    left: 52%;
+    max-height: 31vw;
+  }
+
+  /* --- Game-over button scaling --- */
+
+  #action_button.game-over-landscape {
+    transform: scale(1.2);
+  }
+
+  /* --- True ending button scaling --- */
+
+  .true_ending_button {
+    transform: scale(1.1);
+  }
+}
+
+/* --- Layout adjustments for large displays --- */
+
+@media (min-width: 1900px) and (max-width:2149px) and (min-height:1000px) {
+
+  /* --- Root font size --- */
+
+  html {
+    font-size: 1.4rem;
+  }
+
+  /* --- Modal and ending text font size --- */
+
+  .modal-title, 
+  .modal-text, 
+  .true_ending_text {
+    font-size: 1.5rem;
+  }
+
+  /* --- Modal hint font size --- */
+
+  .modal-hint {
+    font-size: 1.3rem;
+  }
+
+  /* --- Victory button scaling --- */
+
+  #action_button.victory-landscape, 
+  #action_button.epic-victory {
+    transform: scale(1.6);
+  }
+
+  /* --- Default and game-over button scaling --- */
+
+  #action_button.default_style, 
+  #action_button.game-over-landscape, 
+  .true_ending_button {
+    transform: scale(1.45);
+  }
+
+  /* --- Credits button scaling --- */
+
+  .credits_button {
+    transform: scale(1.3);
+  }
+}
+
+/* --- Extra-large screens --- */
+
+@media (min-width: 2150px) {
+
+  /* --- Root font size --- */
+
+  html {
+    font-size: 3.5rem;
+  }
+
+  /* --- Level counter font size--- */
+
+  .level_counter {
+    font-size: 1.95rem;
+  }
+
+  /* --- Doors positioning --- */
+
+  .doors-section {
+    top: 27%;
+  }
+
+  /* --- Modal text width --- */
+
+  .modal-text {
+    max-width: 70vw;
+  }
+
+  /* --- Epic victory button scaling --- */
+
+  #action_button.epic-victory {
+    transform: scale(1.5);
+  }
+
+  /* --- Landscape victory button scaling --- */
+
+  #action_button.victory-landscape {
+    transform: scale(1.35);
+  }
+
+  /* --- Game-over and ending button scaling --- */
+
+  #action_button.game-over-landscape, .true_ending_button {
+    transform: scale(1.25);
+  }
+
+  /* --- Credits button scaling --- */
+
+  .credits_button {
+    transform: scale(1.02);
+  }
+}
+
+/* ---12.4. Landscape adaptations --- */
+
+/* --- Landscape modal layout and styling --- */
+
+@media (max-width:1280px) and (orientation: landscape) {
+
+  /* --- Level counter font size --- */
+
+  .level_counter {
+    font-size: 1.9rem;
+  }
+
+  /* --- Modal background appearance --- */
+
+  #ghost_modal,
+  #instructions_modal,
+  #escaped_modal,
+  #continue_modal,
+  #hurted_modal {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 0.5rem;
+  }
+
+  /* --- Instructions modal border and alignment --- */
+
+  #instructions_modal {
+    border: 2px solid rgb(13,13,13);
+    margin: auto;
+  }
+
+  /* --- Instructions heading and hurt modal hint spacing --- */
+
+  #instructions_modal h2, #hurted_modal .modal-hint {
+    margin-top: 1rem;
+  }
+
+  #instructions_modal h2 {
+    margin-bottom: 1rem;
+  }
+
+  /* --- Credits text height --- */
+
+  .true_ending_text.credits {
+    max-height: 38vw;
+  }
+}
+
+/* --- Landscape layout for medium-height screens --- */
+
+@media (min-height:710px) and (max-height: 849px) and (orientation: landscape) {
+
+  /* --- Ending text font size --- */
+
+  .true_ending_text {
+    font-size: 1.35rem;
+  }
+
+  /* --- Modal hint font size --- */
+
+  .modal-hint {
+    font-size: 1.2rem;
+  }
+
+  /* --- Credits text height --- */
+
+  .true_ending_text.credits {
+    max-height: 34vw;
+  }
+
+  /* --- Victory button scaling --- */
+
+  #action_button.victory-landscape {
+    transform: scale(1.4);
+  }
+
+  /* --- Game-over button scaling --- */
+
+  #action_button.game-over-landscape {
+    transform: scale(1.3);
+  }
+
+  /* --- True ending button scaling --- */
+
+  #action_button.true_ending_button {
+    transform: scale(1.2);
+  }
+
+  /* --- Credits button scaling --- */
+
+  .credits_button {
+    transform: scale(0.98);
+  }
+}
+
+/* --- Landscape layout for taller screens --- */
+
+@media (min-height:850px) and (max-height: 1050px) and (orientation: landscape) {
+
+  /* --- Ending text font size --- */
+
+  .true_ending_text {
+    font-size: 1.43rem;
+  }
+
+  /* --- Modal hint font size --- */
+
+  .modal-hint {
+    font-size: 1.2rem;
+  }
+
+  /* --- Victory button scaling --- */
+
+  #action_button.victory-landscape {
+    transform: scale(1.5);
+  }
+
+  /* --- Game-over button scaling --- */
+
+  #action_button.game-over-landscape {
+    transform: scale(1.4);
+  }
+
+  /* --- True ending button scaling --- */
+
+  .true_ending_button {
+    transform: scale(1.35);
+  }
+
+  /* --- Credits button scaling --- */
+
+  .credits_button {
+    transform: scale(1.13);
+  }
+}
+
+/* --- Ipad and tablet landscape layout--- */
+
+@media (min-width: 1130px) and (max-width:1500px) and (min-height: 710px) and (max-height: 1050px) and (orientation: landscape) {
+
+  /* --- Default action button positioning --- */
+
+  #action_button.default_style {
+    bottom: 17%;
+  }
+}
+
+/* --- Layout for short landscape screens --- */
+
+@media (max-height: 450px) and (orientation: landscape) {
+
+  /* --- Main content alignment --- */
+
+  body {
+    justify-content: flex-start;
+  }
+
+  /* --- Main heading font size --- */
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  /* --- Level counter font size --- */
+
+  .level_counter {
+    font-size: 1.6rem;
+  }
+
+  /* --- Modal text, victory button and ending text font size --- */
+
+  #action_button.victory-landscape, .modal-text, .true_ending_text {
+    font-size: 1.2rem;
+  }
+
+  /* --- Modal hint font size --- */
+
+  .modal-hint {
+    font-size: 1.1rem;
+  }
+
+  /* --- Doors positioning --- */
+
+  .doors-section {
+    top: 24%;
+  }
+
+  /* --- Default button positioning and scaling --- */
+
+  #action_button.default_style {
+    bottom: 10.5%;
+    transform: scale(1.2);
+  }
+
+  /* --- Door sizing --- */
+
+  .door-frame {
+    width: 16vw;
+  }
+
+   /* --- Credits text layout --- */
+
+ .true_ending_text.credits {
+    top: 29%;
+    width: 52%;
+    max-height: 64vh;
+  }
+
+  /* --- Continue modal title spacing --- */
+
+  #continue_modal .modal-title {
+    margin-top: 1rem;
+  }
+
+  /* --- Hurt modal hint spacing --- */
+
+  #hurted_modal .modal-hint {
+    margin-top: 0.75rem;
+  }
+  
+  /* --- Secondary heading spacing --- */
+
+  h2 {
+    margin: 0;
+  }
+
+  /* --- Modal paragraph spacing --- */
+
+  .modal-text p {
+    margin-bottom: 0;
+  }
+
+  /* --- Victory buttons scaling --- */
+  
+  #action_button.victory-landscape , #action_button.epic-victory {
+    transform: scale(1.25);
+  }
+
+  /* --- Ending and game-over button scaling --- */
+
+  #action_button.game-over-landscape, .true_ending_button {
+    transform: scale(1.04);
+  }
+
+  /* --- Credits button scaling --- */
+
+ .credits_button {
+    transform: scale(0.93);
+  }
+}
+
+/* --- Layout for extremely short landscape screens --- */
+
+@media (max-height: 400px) and (orientation: landscape) {
+
+  /* --- Modal paragraph spacing --- */
+
+  .modal-text p {
+    margin-top: 0.9rem;
+  }
+
+  /* --- Credits text height --- */
+
+  .true_ending_text.credits {
+    max-height: 63vh;
+  }
+
+  /* --- Epic victory button scaling --- */
+
+  #action_button.epic-victory {
+    transform: scale(1.2);
+  }
+}
+
+/* --- Layout for narrow, short landscape screens --- */
+
+@media (max-width: 670px) and (max-height: 376px) and (orientation: landscape) {
+
+  /* --- Modal hint font size --- */
+
+  .modal-hint {
+    font-size: 1.15rem;
+  }
+
+  /* --- Doors positioning --- */
+
+  .doors-section {
+    top: 29%;
+  }
+}
+
+/* ---12.5 Portrait adaptations --- */
+
+/* --- Layout adjustments for large portrait screens --- */
+
+@media (min-width: 710px) and (min-height: 1000px) and (orientation: portrait) {
+
+  /* --- Level counter font size --- */
+
+  .level_counter {
+    font-size: 2rem;
+  }
+
+  /* --- Credits text width --- */
+
+  .true_ending_text.credits {
+    width: 51%;
+  }
+
+  /* --- Modal hint spacing --- */
+
+  .modal-hint {
+    margin-top: 2.5rem;
+  }
+
+  /* --- Game-over and victory button scaling --- */
+
+  #action_button.game-over-portrait_square, 
+  #action_button.victory-portrait_square,
+  #action_button.epic-victory {
+    transform: scale(1.6);
+  }
+
+  /* --- Default action button scaling --- */
+
+  #action_button.default_style {
+    transform: scale(1.15);
+  }
+}
+
+/* --- Layout adjustments for smaller portrait screens --- */
+
+@media (max-width: 900px) and (max-height: 1000px) and (orientation: portrait) {
+
+  /* --- Main content alignment --- */
+
+  body {
+    justify-content: flex-start;
+  }
+
+  /* --- Main heading font size --- */
+
+  h1 {
+    font-size: 2.7rem;
+  }
+
+  /* --- Hurt modal text font size --- */
+
+  #hurted_modal .modal-text {
+    font-size: 1.3rem;  
+  }
+
+  /* --- Hurt modal hint spacing --- */
+
+  #hurted_modal .modal-hint {
+    margin-top: 1.5rem;
+  }
+
+  /* --- Hurt modal text spacing --- */
+
+  #hurted_modal .modal-text, #hurted_modal p {
+    margin-top: 0.5rem;
+  }
+
+  /* --- Hurt modal paragraph and heading spacing --- */
+
+  #hurted_modal p, #hurted_modal h2 {
+    margin-bottom: 1rem;
+  }
+}
+
+/* --- Layout adjustments for tall portrait screens --- */
+
+@media (min-height: 1000px) and (orientation: portrait) {
+
+  /* --- Modal title font size --- */
+
+  .modal-title {
+    font-size: 1.7rem;
+  }
+
+  /* --- Ending text font size --- */
+
+  .true_ending_text {
+    font-size: 1.55rem;
+  }
+
+  /* --- Modal text font size --- */
+
+  .modal-text {
+    font-size: 1.5rem;
+  }
+
+  /* --- Modal hint font size --- */
+
+  .modal-hint {
+    font-size: 1.35rem;
+  }
+
+  /* --- Door sizing --- */
+
+  .door-frame {
+    width: 18dvh;
+  }
+
+  /* --- Doors positioning --- */
+
+  .doors-section {
+    top: 9%;
+  }
+
+  /* --- Game-over button positioning --- */
+
+  #action_button.game-over-portrait_square {
+    bottom: 8%;
+  }
+
+  /* --- Default action button scaling --- */
+
+  #action_button.default_style {
+    transform: scale(1.5);
+  }  
+}
+
+/* --- Layout adjustments for tall portrait screens on wider devices --- */
+
+@media (min-height: 860px) and (min-width: 450px) and (orientation: portrait) {
+
+  /* --- Signature positioning and font size --- */
+
+  .signature {
+    position: fixed;
+    font-size: 1.37rem;
+  }
+
+  /* --- Victory button scaling --- */
+
+  #action_button.victory-portrait_square {
+    transform: scale(1.7);
+  }
+
+  /* --- True ending button scaling --- */
+
+  .true_ending_button {
+    transform: scale(1.5);
+  }
+
+  /* --- Credits button scaling --- */
+
+  .credits_button {
+    transform: scale(1.25);
+  }
+}
+
+/* --- Layout adjustments for short, narrow portrait screens --- */
+
+@media (max-height: 668px) and (max-width: 500px) and (orientation: portrait) {
+
+  /* --- Main heading font size --- */
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  /* --- Ending text sizing and positioning --- */
+
+  .true_ending_text {    
+    font-size: 1.15rem;
+    left: 48%;
+  }
+
+  /* --- Doors positioning --- */
+
+  .doors-section {
+    top: 10%;
+  }
+
+  /* --- General modal hint spacing --- */
+
+  .modal-hint {
+    margin-top: 0.5rem;
+  }
+
+  /* --- Hurt modal hint spacing --- */
+
+  #hurted_modal .modal-hint {
+    margin-top: 1rem;
+  }
+
+  /* --- Victory button scaling --- */
+
+  #action_button.victory-portrait_square {
+    transform: scale(1.2);
+  }
+
+  /* --- Default button scaling --- */
+
+  #action_button.default_style {
+    transform: scale(1.15);
+  }
+
+  /* --- Game-over and true ending button scaling --- */
+
+  #action_button.game-over-portrait_square, .true_ending_button {
+    transform: scale(1.1);
+  }
+}
+
+/* --- Layout adjustments for medium-width portrait screens --- */
+
+@media (min-width: 401px) and (max-width: 711px) and (orientation: portrait) {
+
+  /* --- Default, game-over, true ending and credits button scaling --- */
+
+  #action_button.default_style, #action_button.game-over-portrait_square, .true_ending_button, .credits_button {
+    transform: scale(1.2);
+  }
+}
+
+/* --- Layout adjustments for narrow portrait screens --- */
+
+@media (max-width: 480px) and (min-height: 750px) and (orientation: portrait) {
+
+  /* --- Main heading font size --- */
+
+  h1 {
+    font-size: 2.1rem;
+  }
+
+  /* --- Hurt modal text sizing and spacing --- */
+
+  #hurted_modal .modal-text, #hurted_modal .modal-hint {
+    font-size: 1.25rem; 
+  }
+
+  #hurted_modal .modal-text {
+    margin-top: 1.5rem;
+  }
+
+  /* --- Instructions title and hurt modal paragraph spacing --- */
+
+  #instructions_modal .modal-title, #hurted_modal p {
+    margin-top: 1rem;
+  }
+
+  /* --- Hurt modal heading spacing --- */
+
+  #hurted_modal h2 {
+    margin-bottom: 0;
+  }
+
+  /* --- Credits text positioning --- */
+
+  .true_ending_text.credits {
+    top: 29%;
+    left: 50%;
+  }
+
+  /* --- Default button scaling --- */
+
+  #action_button.default_style {
+    transform: scale(1.2)
+  }
+}
+
+/* --- Layout adjustments for extra-narrow portrait screens --- */
+
+@media (max-width: 400px) and (min-height: 700px) and (orientation: portrait) {
+
+  /* --- Ending text font size --- */
+
+  .true_ending_text {
+    font-size: 1.3rem;
+  }
+
+  /* --- Credits text positioning --- */
+
+  .true_ending_text.credits {
+    top: 28%;
+  }
+
+  /* --- Epic victory, ending, and game-over button scaling --- */
+
+  #action_button.epic-victory, 
+  #action_button.game-over-portrait_square,
+  .true_ending_button {
+    transform: scale(1.25);
+  } 
+}
+
+/* --- Layout adjustments for very narrow, short portrait screens --- */
+
+@media (max-width: 375px) and (max-height: 780px) and (orientation: portrait) {
+
+  /* --- Modal title font size --- */
+  
+  .modal-title {
+    font-size: 1.3rem;
+  }
+
+  /* --- Modal hint spacing --- */
+
+  .modal-hint {
+     margin-top: 1rem;
+  }
+
+  /* --- Credits text layout --- */
+
+  .true_ending_text.credits {
+    left: 51%;
+    width: 60%;
+  }
+}
+
+/* ---12.6 square screen adaptation --- */
+
+@media (min-aspect-ratio: 9/10) and (max-aspect-ratio: 11/10) {
+
+   /* --- Modal title font size --- */
+
+  .modal-title {
+    font-size: 1.55rem;
+  }
+
+  /* --- Mdal font size --- */
+
+ .modal-text {
+    font-size: 1.4rem;
+  }
+
+  /* --- Hurt modal font size --- */
+
+  #hurted_modal .modal-text {
+    font-size: 1.35rem;
+  }
+
+  /* --- Modal hint font size --- */
+
+  .modal-hint {
+    font-size: 1.25rem;
+  }
+
+  /* --- Main heading sizing and positioning --- */
+
+  h1 {
+    font-size: clamp(1rem, 7vw, 5rem);
+    top: 20%;
+    margin: 0;
+  }
+
+  /* --- Level counter sizing and positioning --- */
+
+  .level_counter {
+    font-size: clamp(1.5rem, 3.75vw, 3rem);
+    margin-left: 0.6rem;
+    margin-right: 0.25rem;
+    top: 0.75vw;
+    left: 0.75vw;
+  }
+
+  /* --- Ending text sizing and positioning --- */
+
+  .true_ending_text {
+    font-size: 1.4rem;
+    left: 48%;
+    transform: translateX(-40%);
+  }
+
+  /* --- Game-over button styling and positioning --- */
+
+  #action_button.game-over-portrait_square {
+    font-family: "Cinzel Decorative", serif;
+    font-style: normal;
+    top: 7%;
+    bottom: auto;
+    border-radius: 50%;
+    transform: scale(1.2);
+  }
+
+  /* --- Credits text layout --- */
+
+  .true_ending_text.credits {
+    top: 26%;
+    left: 51.5%;
+    width: 40%;
+    height: 62%;
+    max-height: 60vh;
+  }
+
+  /* --- Disclaimer background --- */
+
+  body.disclaimer {
+    background-image: url(./images/disclaimer_square_background_image.png);
+  }
+
+  /* --- Classic victory background --- */
+
+  .classic_win_portrait_square_background {
+    background-image: url('./images/victory_square_background.png');
+  }
+
+  /* --- Epic victory background --- */
+
+  .epic_win_portrait_square_background {
+    background-image: url('./images/epic_win_square_background.png');
+  }
+
+  /* --- True ending background --- */
+
+  .true_ending_portrait_square_background {
+    background-image: url('./images/true_ending_square_background.png');
+  }
+
+  /* --- Game-over background --- */
+
+  .game_over_portrait_square_background {
+    background-image: url("./images/game_over_background.jpeg");
+  }
+
+  /* --- Ghost modal background --- */
+
+  #ghost_modal .modal_content {
+    background-image: url("./images/ghost_landscape_square_image.jpg");
+  }
+
+  /* --- Door sizing --- */
+
+  .door-frame {
+    width: 18dvh;
+  }
+
+  /* --- Header positioning --- */
+
+  .header {
+    top: 15%;
+  }
+
+  /* --- Signature positioning --- */
+
+  .signature {
+    right: 1vw;
+  }
+
+  /* --- Doors layout and positioning --- */
+
+  .doors-section {
+    flex-direction: row;
+    top: 38%;
+  }
+
+  /* --- Epic victory button scaling --- */
+
+  #action_button.epic-victory {
+    transform: scale(1.5);
+  }
+
+  /* --- True ending button positioning and scaling --- */
+
+  .true_ending_button {
+    bottom: 8%;
+    transform: scale(1.25);
+  }
+
+  /* --- Default action button positioning and scaling --- */
+
+  #action_button.default_style {
+    bottom: 15%;
+    transform: scale(1.4);
+  }
+
+  /* --- Credits button scaling --- */
+
+  .credits_button {
+    transform: scale(1);
+  }
+}
+
+/* --- Responsive adjustments for square screens on narrow devices --- */
+
+@media (max-width: 710px) and (min-aspect-ratio: 9/10) and (max-aspect-ratio: 11/10) {
+
+  /* --- Modal title font size --- */
+
+  .modal-title {
+    font-size: 1.45rem;
+  }
+
+  /* --- Instructions modal font size --- */
+
+  #instructions_modal .modal-text {
+    font-size: 1.35rem;
+  }
+
+  /* --- Modal body text and ending text font size --- */
+
+  #hurted_modal .modal-text, .modal-text, .true_ending_text {
+    font-size: 1.25rem;
+  }
+
+  /* --- Modal hint font size --- */
+
+  .modal-hint {
+    font-size: 1.2rem;
+  }
+
+  /* --- Doors positioning --- */
+
+  .doors-section {
+    top: 35%;
+  }
+
+  /* --- Door sizing --- */
+
+  .door-frame {
+    width: 20dvh;
+  }
+
+  /* --- Epic victory button scaling --- */
+
+  #action_button.epic-victory {
+    transform: scale(1.25);
+  }
+
+  /* --- Default action button scaling --- */
+
+  #action_button.default_style {
+    transform: scale(1.2);
+  }
+
+  /* --- True ending button scaling --- */
+  
+  .true_ending_button {
+    transform: scale(1.1);
+  }
+
+  /* --- Game over button scaling --- */
+
+  #action_button.game-over-portrait_square {
+    transform: scale(1.05);
+  }
+
+  /* --- Credits button scaling --- */
+
+  .credits_button {
+    transform: scale(0.9);
+  }
+}
+
+/* --- Responsive adjustments for tall square screens --- */
+
+@media (min-height:1000px) and (min-aspect-ratio: 9/10) and (max-aspect-ratio: 11/10) {
+
+  /* --- Modal title font size --- */
+
+  .modal-title {
+    font-size: 1.9rem;
+  }
+
+  /* --- Instructions modal title font-size--- */
+
+  #instructions_modal .modal-title {
+    font-size: 2rem;
+  }
+
+  /* --- Modal body and ending text sizing --- */
+
+  #hurted_modal .modal-text, 
+  .modal-text, 
+  .true_ending_text {
+    font-size: 1.8rem;
+  }
+  
+  /* --- Modal hint font size --- */
+
+  .modal-hint {
+    font-size: 1.55rem;
+  }
+
+  /* --- Victory button scaling --- */
+
+  #action_button.victory-portrait_square {
+    transform: scale(2.06);
+  }
+
+  /* --- True ending button scaling --- */
+
+  .true_ending_button {
+    transform: scale(1.65);
+  }
+
+  /* --- Epic victory button scaling --- */
+
+  #action_button.epic-victory {
+    transform: scale(1.8);
+  }
+
+  /* --- Default action button scaling --- */
+
+  #action_button.default_style {
+    transform: scale(1.7);
+  }
+
+  /* --- Credits button scaling --- */
+
+  .credits_button {
+    transform: scale(1.5);
+  }
+  
+  /* --- Game-over button scaling --- */
+  
+  #action_button.game-over-portrait_square {
+    transform: scale(1.5);
+  } 
+}

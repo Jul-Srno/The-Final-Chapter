@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!--
+    --------------------------------------------------
+    DOCUMENT METADATA
+    -------------------------------------------------- 
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>The final Chapter</title>
+    
+    <!-- 
+    --------------------------------------------------
+    STYLES
+    -------------------------------------------------- 
+    -->
+
+    <!-- Loads the main stylesheet responsible for the game's visual presentation. -->
+    <link rel="stylesheet" href="./resources/style.css">
+
+    <!-- 
+    --------------------------------------------------
+    FAVICONS
+    -------------------------------------------------- 
+    -->
+
+    <!-- SVG favicon -->
+    <link rel="icon" type="image/svg+xml" href="./favicons/candle.svg">
+
+    <!-- ICO favicon for browser compatibility -->
+    <link rel="icon" href="./favicons/candle.ico">
+
+    <!-- 
+    --------------------------------------------------
+    FONTS
+    -------------------------------------------------- 
+    -->
+
+    <!-- Loads the Google Fonts used throughout the game's visual design. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400..900&family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Special+Elite&display=swap"
+    rel="stylesheet" >
+    
+    <!-- 
+    --------------------------------------------------
+    APPLICATION
+    -------------------------------------------------- 
+    -->
+
+    <!-- Loads the main JavaScript module and initializes the game. -->
+    <script type="module" src="./modules/main.js"></script>
+  </head>
+
+  <body>
+    <!-- 
+    --------------------------------------------------
+    HEADER
+    -------------------------------------------------- 
+    -->
+
+    <!-- Displays the game title and current level. -->
+    <header class="header">
+      <span 
+        class="level_counter"
+        tabindex="0">
+      </span>
+      <h1>The Final Chapter</h1>
+    </header>
+    
+    <!-- 
+    --------------------------------------------------
+    MAIN CONTENT
+    -------------------------------------------------- 
+    -->
+
+    <main>
+      <!-- 
+      --------------------------------------------------
+      GAME MODALS
+      -------------------------------------------------- 
+      -->
+
+      <!-- Displays the initial game disclaimer and screen reader instructions. -->
+      <div
+        id="disclaimer_modal"
+        class="disclaimer"
+        tabindex="0"
+        aria-modal="true"
+        aria-hidden="true">
+      
+        <div id="disclaimer" 
+             class="sr-only"
+             tabindex="-1">
+          <p aria-hidden="true">This game contains sudden loud sounds and disturbing imagery.</p>
+          <p aria-hidden="true">Not recommended for sensitive players or those with heart conditions.</p>
+          <p aria-hidden="true">To enjoy the narrative experience, activate your screen reader or open your browser console.</p>
+          <p aria-hidden="true">Click here, or press Tab then Enter to descend into the tomb</p>
+        </div>
+      </div>
+    
+      <!-- Displays the game's instructions before the first round. -->
+      <div
+        id="instructions_modal"
+        class="modal"
+        tabindex="-1"
+        aria-modal="true"
+        aria-hidden="true">
+      
+        <div class="modal_content">
+          <div class="modal-title">
+            <h2>Some doors should never be opened...</h2>
+          </div>
+          <div class="modal-text">
+            <!-- Makes each paragraph keyboard-focusable for easier screen reader navigation. -->
+            <p>You descend into the ancient tomb, silent and untouched for centuries.
+               
+               Shadows stretch across the walls, and the air feels heavy with memories of the past.</p>
+
+            <p>Three doors lie ahead: behind one, the vengeful ghost stirs, restless and merciless; another shelters children, trembling but alive, relying on your courage.  
+               The third leads upward, to the next level of the tomb—your path to survival.</p>
+
+            <p>Your mission: find the captives and reach the exit, without succumbing to the ghost.
+               Every choice matters. One wrong step, and this tomb may claim you… forever.</p>
+
+            <p class="modal-hint"><em>Activate this screen to begin… your fate lies behind one of these doors.</em></p>
+
+          </div>
+        </div>
+      </div>
+    
+      <!-- Displays the ghost encounter. -->
+      <div
+        id="ghost_modal"
+        class="modal"
+        tabindex="0"
+        aria-hidden="true">
+        <div class="modal_content"><span tabindex="0"></span></div>
+      </div>
+
+      <!-- Displays the escape sequence. -->
+      <div
+        id="escaped_modal"
+        class="modal"
+        tabindex="0"
+        aria-hidden="true">
+        <div class="modal_content"><span tabindex="0"></span></div>
+      </div>
+
+      <!-- Displays the crucifix protection sequence. -->
+      <div
+        id="continue_modal"
+        class="modal"
+        tabindex="-1"
+        aria-modal="true"
+        aria-hidden="true">
+      
+        <div class="modal_content">
+          <div class="modal-title">
+            <h2>A Narrow Escape...</h2>
+          </div>
+          <div class="modal-text">
+            <p>The crucifix shields you, sparing you from the ghost’s wrath… for now.</p>
+   
+            <p>You are shaken, but not defeated. Steady your heart, gather your courage, and press further into the tomb.</p>
+  
+            <p>The children still wait.</p>
+            <p class="modal-hint"><em>Activate the button below the doors to continue your journey.</em></p>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Displays the injured state and its countdown warning. -->
+      <div
+        id="hurted_modal"
+        class="modal"
+        aria-modal="true"
+        aria-hidden="true">
+      
+        <div class="modal_content">
+          <div class="modal-title">
+            <h2>Grievous Wounds...</h2>
+          </div>
+          <div class="modal-text">
+            <p>The crucifix saved you, but not without cost.
+               You have been severely hurt, your protection lost.</p>
+    
+            <p>The ghost still prowls the tomb, relentless.
+               You have only 30 seconds to rescue the children and reach the exit… or the darkness will claim you.</p>   
+            <p class="modal-hint"><em>Activate the button beneath the doors to continue.</em></p>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- 
+      --------------------------------------------------
+      NARRATION
+      -------------------------------------------------- 
+      -->
+
+      <!-- Displays the visual text used during the true ending sequence. -->
+      <p
+        id="trueEndingText"
+        class="true_ending_text"
+        aria-hidden="true">
+      </p>
+
+      <!-- Provides screen reader narration independently from the visual text. -->
+      <p
+        id="narrativeSR"
+        class="sr-only"
+        aria-live="polite"
+        aria-relevant="additions text"
+        aria-atomic="true">
+      </p>
+
+      <!-- 
+      --------------------------------------------------
+      GAME AREA
+      -------------------------------------------------- 
+      -->
+
+      <!-- Contains the interactive game area, including doors and controls. -->
+      <section 
+        class="game_content">
+      
+        <!-- 
+        --------------------------------------------------
+        DOORS
+        -------------------------------------------------- 
+        -->
+
+        <!-- Each door is a native button for keyboard and screen reader accessibility. The door image is decorative; the button's aria-label identifies the door.-->
+        <div
+          id="game_content" 
+          class="doors-section">
+          <button
+            class="door-button"
+            type="button"
+            aria-label="First door">
+            <img
+              id="door1"
+              class="door-frame"
+              src="./resources/images/closed_door.png"
+              alt="">
+          </button>
+
+          <button
+            class="door-button"
+            type="button"
+            aria-label="Second door">
+            <img
+              id="door2"
+              class="door-frame"
+              src="./resources/images/closed_door.png"
+              alt="">
+          </button>
+
+          <button
+            class="door-button"
+            type="button"
+            aria-label="Third door">
+              <img
+              id="door3"
+              class="door-frame"
+              src="./resources/images/closed_door.png"
+              alt="">
+          </button>
+        </div>
+      
+        <!-- 
+        --------------------------------------------------
+        GAME CONTROLS
+        -------------------------------------------------- 
+        -->
+
+        <!-- Contains the main game action andcredits controls. -->
+        <div class="buttons">
+
+          <button
+            id="credits"
+            class="credits_button"
+            type="button">
+            Credits
+          </button>
+
+          <button
+            id="action_button"
+            class="default_style"
+            type="button">
+            Good luck
+          </button>
+        </div>
+      </section>
+      
+      <!-- Backup for screen reader announcements during the ending sequence. -->
+      <div
+        id="endingReaderBackUp"
+        tabindex="-1"
+        class="sr-only">
+      </div>
+    </main>
+
+    <!-- 
+    -------------------------------------------------
+    FOOTER
+    -------------------------------------------------- 
+    -->
+
+    <!-- Contains the player's inventory and the game signature. -->
+    <footer>
+      <div id="inventory">
+        <span 
+          class="crucifix"
+          tabindex="0"
+          aria-label="Inventory crucifix item">
+          <img
+            src="./resources/images/crucifix_icon.avif"
+            alt="Crucifix item">
+        </span>
+      </div>
+
+      <p
+        class="signature"
+        role="note"
+        tabindex="0"
+        aria-label="Game developed by Jul Srno, 2026">
+        Jul_Srno 2026
+      </p>
+
+    </footer>
+    
+  </body>
+</html>
