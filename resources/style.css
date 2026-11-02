@@ -837,7 +837,7 @@ h1 {
   /* --- Signature positioning and sizing --- */
 
   .signature {
-    font-size: clamp(1.15rem, 2.5vw, 4rem);
+    font-size: clamp(1.1rem, 2.5vw, 4rem);
     bottom: 1vw;
     right: 1.5vw;
   }
@@ -899,7 +899,7 @@ h1 {
 
 /* --- Layout adjustments for large displays --- */
 
-@media (min-width: 1900px) and (max-width:2149px) and (min-height:1000px) {
+@media (min-width: 1900px) and (max-width: 2149px) and (min-height: 1000px) {
 
   /* --- Root font size --- */
 
@@ -907,10 +907,20 @@ h1 {
     font-size: 1.4rem;
   }
 
+  /* --- Modal title font size --- */
+
+  .modal-title {
+    font-size: 1.8rem;
+  }
+
+  /* --- Modal text font size --- */
+
+  .modal-text {
+    font-size: 1.7rem;
+  }
+
   /* --- Modal and ending text font size --- */
 
-  .modal-title, 
-  .modal-text, 
   .true_ending_text {
     font-size: 1.5rem;
   }
@@ -1421,6 +1431,75 @@ h1 {
   }  
 }
 
+/* --- Adjust modal text sizes for portrait screens between 1000px and 1200px --- */
+
+@media (min-width: 1000px) and (max-width: 1200px) and (orientation: portrait) {
+
+  /* --- Modal title font size --- */
+
+  .modal-title {
+    font-size: 2rem;
+  }
+
+  /* --- Modal text font size --- */
+
+  .modal-text {
+    font-size: 1.8rem;
+  }
+
+  /* --- Modal hint font size --- */
+
+    .modal-hint {
+    font-size: 1.5rem;
+  }
+}
+
+/* --- Adjust modal text sizes for portrait screens between 1200px and 1400px --- */
+
+@media (min-width: 1200px) and (max-width: 1400px) and (orientation: portrait) {
+
+  /* --- Modal title font size --- */
+
+  .modal-title {
+    font-size: 2.4rem;
+  }
+
+  /* --- Modal text font size --- */
+
+  .modal-text {
+    font-size: 2rem;
+  }
+
+/* --- Modal hint font size --- */
+
+    .modal-hint {
+    font-size: 1.6rem;
+  }
+}
+
+/* --- Adjust modal text sizes for portrait screens between 1400px and 2150px --- */
+
+@media (min-width: 1400px) and (max-width: 2150px) and (orientation: portrait) {
+
+  /* --- Modal title font size --- */
+
+  .modal-title {
+    font-size: 2.7rem;
+  }
+
+  /* --- Modal text font size --- */
+
+  .modal-text {
+    font-size: 2.2rem;
+  }
+
+  /* --- Modal hint font size --- */
+
+  .modal-hint {
+    font-size: 1.8rem;
+  }
+}
+
 /* --- Layout adjustments for tall portrait screens on wider devices --- */
 
 @media (min-height: 860px) and (min-width: 450px) and (orientation: portrait) {
@@ -1458,7 +1537,7 @@ h1 {
   /* --- Main heading font size --- */
 
   h1 {
-    font-size: 2rem;
+    font-size: 2.15rem;
   }
 
   /* --- Ending text sizing and positioning --- */
