@@ -867,7 +867,7 @@ h1 {
 @media (min-width:1000px) and (orientation: landscape) {
 
   #action_button.default_style {
-    transform: scale(1.4);
+    transform: scale(1.3);
     bottom: 10.5%;
   }
 }
@@ -1198,7 +1198,7 @@ h1 {
 
   #action_button.default_style {
     bottom: 10.5%;
-    transform: scale(1.2);
+    transform: scale(1.1);
   }
 
   /* --- Door sizing --- */
